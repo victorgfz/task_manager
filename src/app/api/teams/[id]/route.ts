@@ -3,7 +3,8 @@ import { getAllTeamPageInfo, getUserId } from "@/db/queries";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
     try {
-        const teamId = (await params).id
+
+        const teamId = params.id
         const userId = await getUserId()
 
         if (!userId) return NextResponse.json({ error: "Usuário não autenticado" }, { status: 401 })
