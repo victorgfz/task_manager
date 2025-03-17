@@ -12,6 +12,9 @@ const fontSans = Montserrat({
 
 export const metadata: Metadata = {
   title: "Task Manager",
+  icons: {
+    icon: "/favicon.png",
+  },
 
 };
 
