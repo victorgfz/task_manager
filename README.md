@@ -34,10 +34,6 @@ A estrutura do projeto está organizada da seguinte forma:
 │   │-- /hooks            # Hooks personalizados para gerenciamento de estados
 │   │-- /styles           # Configurações do Tailwind CSS
 │   │-- /utils            # Funções utilitárias
-│-- .gitignore            # Arquivo para ignorar arquivos/diretórios no Git
-│-- README.md             # Documentação do projeto
-│-- package-lock.json     # Controle de versões das dependências
-│-- package.json          # Dependências e scripts do projeto
 ```
 
 
