@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1739925422382,
+      "tag": "0000_solid_plazm",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740010716302,
+      "tag": "0001_useful_lady_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740257962803,
+      "tag": "0002_past_selene",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1741487049289,
+      "tag": "0003_sleepy_midnight",
+      "breakpoints": true
+    }
+  ]
+}

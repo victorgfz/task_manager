@@ -1,0 +1,1 @@
+ALTER TABLE "team_users" ALTER COLUMN "role" SET DEFAULT 'admin';
