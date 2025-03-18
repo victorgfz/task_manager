@@ -42,6 +42,7 @@ export const getAllTeamsPageInfo = cache(async (userId: string) => {
 })
 
 export const getAllTeamPageInfo = cache(async (userId: string, teamId: string) => {
+
     const team = await db.select({
         id: teams.id,
         title: teams.title,
@@ -70,6 +71,8 @@ export const getAllTeamPageInfo = cache(async (userId: string, teamId: string) =
         createdAt: tasks.createdAt,
         updatedAt: tasks.updatedAt,
     }).from(tasks).where(eq(tasks.teamId, teamId))
+
+
 
     return { userIsMember, team, teamMembers, teamMembersTasks, userId }
 })

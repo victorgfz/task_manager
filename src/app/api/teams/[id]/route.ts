@@ -1,17 +1,18 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getAllTeamPageInfo, getUserId } from "@/db/queries";
 
-type Params = Promise<{ id: string }>
 
-export async function GET(req: NextRequest, { params }: { params: Params }) {
+
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
 
-        const teamId = (await params).id
+        const { id } = await params
+        console.log(id)
         const userId = await getUserId()
 
         if (!userId) return NextResponse.json({ error: "Usuário não autenticado" }, { status: 401 })
 
-        const teamInfo = await getAllTeamPageInfo(userId, teamId)
+        const teamInfo = await getAllTeamPageInfo(userId, id)
 
         return NextResponse.json(teamInfo, { status: 200 })
 
