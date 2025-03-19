@@ -43,6 +43,7 @@ export const UserTasksItem = ({ teamId, id, description, situation, updatedAt, c
     const handleDelete = async () => {
         try {
             await deleteTask(id)
+            mutate(`/api/teams/${teamId}`)
         } catch (error) {
             console.log(error)
         }

@@ -7,7 +7,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     try {
 
         const { id } = await params
-        console.log(id)
         const userId = await getUserId()
 
         if (!userId) return NextResponse.json({ error: "Usuário não autenticado" }, { status: 401 })
