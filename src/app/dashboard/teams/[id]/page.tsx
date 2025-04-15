@@ -73,9 +73,9 @@ export default function TeamPage() {
 
 
         </div>
-        <UserTasks name={userInfo.name} role={userInfo.role} tasks={userTasks} teamMembers={userInfo.role === 'admin' ? data.teamMembers : undefined} teamId={userInfo.role === 'admin' ? data.team[0].id : undefined} />
+        <UserTasks name={userInfo.name} role={userInfo.role} tasks={userTasks} teamMembers={data.teamMembers} teamId={userInfo.role === 'admin' ? data.team[0].id : undefined} teamMembersTasks={data.teamMembersTasks} teamProjects={data.teamProjects} />
 
-        <MembersList members={membersWithoutUser} tasks={membersTasks} />
+        <MembersList members={membersWithoutUser} teamMembers={data.teamMembers} tasks={membersTasks} teamMembersTasks={data.teamMembersTasks} teamProjects={data.teamProjects} />
 
     </div>)
 }

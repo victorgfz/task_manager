@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "./index";
-import { reports, tasks, teams, teamUsers, users } from "./schema";
+import { projects, reports, tasks, teams, teamUsers, users } from "./schema";
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 
@@ -31,9 +31,9 @@ export const deleteTeam = async (teamId: string) => {
     revalidatePath("/dashboard/teams");
 }
 
-export const createTask = async (description: string, members: string[], teamId: string) => {
+export const createTask = async (description: string, members: string[], priority: number, teamId: string, projectId: string | null, index: number | null) => {
     const task = await Promise.all(members.map(async (item) => {
-        return await db.insert(tasks).values({ description, userId: item, teamId }).returning()
+        return await db.insert(tasks).values({ description, userId: item, priority, teamId, projectId, index }).returning()
     }))
     revalidatePath("/dashboard/teams/[id]", "page")
     return task[0]
@@ -58,6 +58,22 @@ export const updateTaskSituation = async (id: string, situation: string) => {
 
 export const deleteTask = async (id: string) => {
     await db.delete(tasks).where(eq(tasks.id, id))
+    revalidatePath("/dashboard/teams/[id]", "page");
+}
+
+export const createProject = async (title: string, teamId: string, tasks: { description: string, members: string[], priority: number, index: number }[]) => {
+
+    const project = await db.insert(projects).values({ title, teamId }).returning()
+    const tasksCreated = await Promise.all(tasks.map(async (item) => {
+        await createTask(item.description, item.members, item.priority, teamId, project[0].id, item.index)
+    }))
+    revalidatePath("/dashboard/teams/[id]", "page");
+    return tasksCreated[0]
+}
+
+export const deleteProject = async (projectId: string) => {
+    await db.delete(projects).where(eq(projects.id, projectId))
+    await db.delete(tasks).where(eq(tasks.projectId, projectId))
     revalidatePath("/dashboard/teams/[id]", "page");
 }
 

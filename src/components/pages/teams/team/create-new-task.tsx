@@ -12,9 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
+import { Slider } from "@/components/ui/slider"
 
 import { Check, ListTodo } from "lucide-react"
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
@@ -23,7 +24,8 @@ import { mutate } from "swr";
 
 const newTaskSchema = z.object({
     description: z.string().min(2, "Dê mais detalhes sobre a tarefa!"),
-    members: z.string().array().min(1, "Precisa selecionar ao menos um membro da equipe!")
+    members: z.string().array().min(1, "Precisa selecionar ao menos um membro da equipe!"),
+    priority: z.number().min(1).max(3)
 })
 
 type newTaskProps = z.infer<typeof newTaskSchema>
@@ -43,20 +45,20 @@ export const CreateNewTask = ({ teamId, teamMembers }: TeamIdProps) => {
 
     teamMembers.sort((a, b) => a.role.localeCompare(b.role))
 
-    const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm<newTaskProps>({
+    const { control, register, handleSubmit, formState: { errors }, setValue, getValues, reset, watch } = useForm<newTaskProps>({
         resolver: zodResolver(newTaskSchema),
         defaultValues: {
             description: "",
-            members: []
+            members: [],
+            priority: 2,
         }
     })
 
     const onSubmit = async (data: newTaskProps) => {
         try {
-            const task = await createTask(data.description, data.members, teamId)
-            if (task) {
-                reset()
-            }
+
+            await createTask(data.description, data.members, data.priority, teamId, null, null)
+            reset()
             toast({
                 description: "Tarefa criada com sucesso!",
             })
@@ -87,6 +89,21 @@ export const CreateNewTask = ({ teamId, teamMembers }: TeamIdProps) => {
                                 type="submit"><Check size={16} /></Button>
                         </div>
                         {errors.description && <p className="text-destructive text-[.8rem]">{errors.description.message}</p>}
+                        <div className="w-full">
+                            <p className="font-bold">Prioridade: {watch("priority")}</p>
+                            <Controller
+                                name="priority"
+                                control={control}
+                                render={({ field }) => (
+                                    <Slider
+                                        value={[field.value]}
+                                        onValueChange={(value) => field.onChange(value[0])}
+                                        min={1}
+                                        max={3}
+                                        step={1} />)}
+                            />
+                        </div>
+
 
                         {teamMembers && teamMembers.length > 0 ? <ul className="flex flex-col gap-2 items-start justify-center w-full py-2">{teamMembers.map((item) => {
                             return (

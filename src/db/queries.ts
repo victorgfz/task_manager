@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { cache } from "react";
 import { db } from "./index";
-import { tasks, teamUsers, teams, users } from "./schema"
+import { projects, tasks, teamUsers, teams, users } from "./schema"
 import { eq, and, count } from "drizzle-orm";
 
 
@@ -67,12 +67,19 @@ export const getAllTeamPageInfo = cache(async (userId: string, teamId: string) =
         id: tasks.id,
         userId: tasks.userId,
         description: tasks.description,
+        priority: tasks.priority,
         situation: tasks.situation,
         createdAt: tasks.createdAt,
         updatedAt: tasks.updatedAt,
+        projectId: tasks.projectId,
+        index: tasks.index,
     }).from(tasks).where(eq(tasks.teamId, teamId))
 
+    const teamProjects = await db.select({
+        id: projects.id,
+        title: projects.title,
+    }).from(projects).where(eq(projects.teamId, teamId))
 
 
-    return { userIsMember, team, teamMembers, teamMembersTasks, userId }
+    return { userIsMember, team, teamMembers, teamMembersTasks, teamProjects, userId }
 })

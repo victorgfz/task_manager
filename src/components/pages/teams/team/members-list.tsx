@@ -5,26 +5,38 @@ import { MemberDetails } from "./member-details"
 
 type MembersListProps = {
     members: MembersProps[],
-    tasks: TasksProps[]
+    tasks: TasksProps[],
+    teamMembersTasks: TasksProps[],
+    teamProjects: TeamProject[]
+    teamMembers: MembersProps[]
 }
 
 type MembersProps = {
     userId: string,
     name: string,
-    role: string
-    image: string
+    role: string,
+    image: string,
 }
 
 type TasksProps = {
     id: string,
     description: string,
     situation: string,
+    priority: number,
     createdAt: Date,
     updatedAt: Date,
     userId: string,
+    projectId: string | null;
+    index: number | null;
 }
 
-export const MembersList = ({ members, tasks }: MembersListProps) => {
+type TeamProject = {
+    id: string
+    title: string,
+}
+
+
+export const MembersList = ({ members, tasks, teamMembersTasks, teamProjects, teamMembers }: MembersListProps) => {
 
     members.sort((a, b) => a.role.localeCompare(b.role))
 
@@ -37,9 +49,12 @@ export const MembersList = ({ members, tasks }: MembersListProps) => {
                         key={item.userId}
                         name={item.name}
                         role={item.role}
-
+                        userId={item.userId}
                         image={item.image}
                         tasks={thisMemberTasks}
+                        teamMembersTasks={teamMembersTasks}
+                        teamMembers={teamMembers}
+                        teamProjects={teamProjects}
                     />)
                 })}
             </Accordion> : <div className="w-full border border-muted p-4 rounded-md"><p className="text-muted-foreground italic">Nenhum membro adicionado até o momento.</p></div>

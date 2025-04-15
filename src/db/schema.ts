@@ -118,7 +118,18 @@ export const tasks = pgTable("tasks", {
     id: uuid("id").primaryKey().defaultRandom(),
     situation: text("situation").notNull().default("not_started"),
     description: text("description").notNull(),
+    priority: integer("priority").notNull().default(2),
     userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    teamId: uuid("team_id").notNull().references(() => teams.id, { onDelete: "cascade" }),
+    projectId: uuid("project_id").references(() => projects.id, { onDelete: "cascade" }),
+    index: integer("index"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull()
+})
+
+export const projects = pgTable("projects", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
     teamId: uuid("team_id").notNull().references(() => teams.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull()
